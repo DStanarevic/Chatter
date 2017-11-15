@@ -17,7 +17,8 @@ namespace Chatter.Controllers
         // GET: Chats
         public ActionResult Index()
         {
-            return View(db.Chats.ToList());
+            var chats = db.Chats.Include(c => c.AspNetUser);
+            return View(chats.ToList());
         }
 
         // GET: Chats/Details/5
@@ -38,6 +39,7 @@ namespace Chatter.Controllers
         // GET: Chats/Create
         public ActionResult Create()
         {
+            ViewBag.UserId = new SelectList(db.AspNetUsers, "Id", "Email");
             return View();
         }
 
@@ -46,7 +48,7 @@ namespace Chatter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ChatID,Username,Message,Timestamp")] Chat chat)
+        public ActionResult Create([Bind(Include = "ID,UserId,Message,Timestamp")] Chat chat)
         {
             if (ModelState.IsValid)
             {
@@ -55,6 +57,7 @@ namespace Chatter.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.UserId = new SelectList(db.AspNetUsers, "Id", "Email", chat.UserId);
             return View(chat);
         }
 
@@ -70,6 +73,7 @@ namespace Chatter.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.UserId = new SelectList(db.AspNetUsers, "Id", "Email", chat.UserId);
             return View(chat);
         }
 
@@ -78,7 +82,7 @@ namespace Chatter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ChatID,Username,Message,Timestamp")] Chat chat)
+        public ActionResult Edit([Bind(Include = "ID,UserId,Message,Timestamp")] Chat chat)
         {
             if (ModelState.IsValid)
             {
@@ -86,6 +90,7 @@ namespace Chatter.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.UserId = new SelectList(db.AspNetUsers, "Id", "Email", chat.UserId);
             return View(chat);
         }
 
