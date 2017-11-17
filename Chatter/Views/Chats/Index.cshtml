@@ -11,7 +11,7 @@
 </p>
 
 <div id="response">
-    
+
 </div>
 <button id="getChats" class="btn btn-primary">Get Chats</button>
 
@@ -19,52 +19,58 @@
 
 
 @section Scripts {
-<script>
+    <script>
 @*$.get("@Url.Action("TestJson", "Chats")", function (response) {
             alert(response);
 });*@
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
 
+            $("#getChats").click(myFunction);
+            function myFunction() {
+                //$("#getChats").click(
+                //function () {
+                    $.get("@Url.Action("TestJson","Chats")", function (serverResponse) {
+                        var jsonTest = JSON.parse(serverResponse);
+                        console.log(jsonTest);
 
-        $("#getChats").click(
-            function() {
-                $.get("@Url.Action("TestJson","Chats")", function (serverResponse) {
-                    var jsonTest = JSON.parse(serverResponse);
-                    console.log(jsonTest);
+                        var ul = $("<ul>", { id: "messageList", "class": "bg-primary" });
+                        //ul.click(function () { alert("ul was clicked!"); });
+                        $("#response").append(ul);
 
-                    var ul = $("<ul>", { id: "messageList", "class": "bg-primary" });
-                    //ul.click(function () { alert("ul was clicked!"); });
-                    $("#response").append(ul);
-
-                    $.each(jsonTest, function (inx, val) {
-                        var myBgClass = ["bg-info","bg-warning"];
-                        var li = $("<li>", { id: "li" + inx, "class": myBgClass[inx % 2] });
-                        li.text(val.Message);
-                        //li.click(function () { alert("my index is " + inx); });
-                        ul.append(li); //similar to $("#messageList").append(li), but more
-                        //efficient b/c it doesn't need to query for the list
-                        //again.
-                        //$("#response").text(jsonTest.firstName);
+                        $.each(jsonTest, function (inx, val) {
+                            var myBgClass = ["bg-info", "bg-warning"];
+                            var li = $("<li>", { id: "li" + inx, "class": myBgClass[inx % 2] });
+                            li.text(val.Message);
+                            //li.click(function () { alert("my index is " + inx); });
+                            ul.append(li); //similar to $("#messageList").append(li), but more
+                            //efficient b/c it doesn't need to query for the list
+                            //again.
+                            //$("#response").text(jsonTest.firstName);
+                        });
                     });
-                });
-            })
+                }
+            
 
-        //$("#postChats").click(
+            //$("#postChats").click(
 
-        //    );
+            //    );
 
-    });
-</script>
-    <script>
-     /*  // $.each(jsonTest.children, function () {
-            //$("#response").append("<li>" + firstName + "</li>");
-            $.each(this, function (name, value) {
-                console.log(value);
-                $("#response").append("<li>" + value + "</li>");
-            });
         });
-        $("#response").append("</ul>");*/
     </script>
+    <script>
+        /*  // $.each(jsonTest.children, function () {
+               //$("#response").append("<li>" + firstName + "</li>");
+               $.each(this, function (name, value) {
+                   console.log(value);
+                   $("#response").append("<li>" + value + "</li>");
+               });
+           });
+           $("#response").append("</ul>");*/
+    </script>
+
 }
+
+
+                            
