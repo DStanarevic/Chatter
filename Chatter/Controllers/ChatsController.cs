@@ -16,19 +16,43 @@ namespace Chatter.Controllers
         private ChatterEntities db = new ChatterEntities();
 
         // GET: Chats
+        [Authorize][HttpsRequire]
         public ActionResult Index()
         {
             var chats = db.Chats.Include(c => c.AspNetUser);
             return View(chats.ToList());
 
 
-        }
 
+        }
+        
         public JsonResult TestJson()
         {
-            string jsonTest = "{ \"firstName\": \"Bob\", \"lastName\": \"Sauce\", \"children\": [{\"firstName\": \"Barbie\", \"age\": 19 },{\"firstName\": \"Ron\", \"age\": null }] }";
+            //string jsonTest = "{ \"firstName\": \"Bob\", \"lastName\": \"Sauce\", \"children\": [{\"firstName\": \"Barbie\", \"age\": 19 },{\"firstName\": \"Ron\", \"age\": null }] }";
 
-                return Json(jsonTest, JsonRequestBehavior.AllowGet);
+            //var chats = from Chats in db.Chats
+            //            orderby
+            //            Chats.Timestamp descending
+            //            select new
+            //            {
+            //                Chats.Message,
+            //                Chats.AspNetUser.UserName
+            //            };
+
+            //var output = JsonConvert.SerializeObject(chats.ToList());
+
+            var chats = from Chats in db.Chats
+                        orderby
+                        Chats.Timestamp descending
+                        //Selects Message and UserName from the Chats 
+                        select new
+                        {
+                            Chats.Message,
+                            Chats.AspNetUser.UserName
+                        };
+
+            var output = JsonConvert.SerializeObject(chats.ToList());
+            return Json(output, JsonRequestBehavior.AllowGet);
             }
         // GET: Chats/Details/5
         public ActionResult Details(int? id)
