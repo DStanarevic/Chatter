@@ -9,37 +9,37 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Message)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Timestamp)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AspNetUser.Email)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Message)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Timestamp)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AspNetUser.Email)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
+<div id="response">
+    
+</div>
+<button id="getChats" class="btn btn-primary">Get Chats</button>
+
+
+
+
+@section Scripts {
+<script>
+@*$.get("@Url.Action("TestJson", "Chats")", function (response) {
+            alert(response);
+});*@
+
+    $("#getChats").on("click", function (){
+        $.get("@Url.Action("TestJson","Chats")", function (serverResponse) {
+            var jsonTest = JSON.parse(serverResponse);
+            console.log(jsonTest);
+            $("#response").text(jsonTest.firstName);
+        });
+    });
+</script>
+    <script>
+        $.each(jsonTest.children, function () {
+            //$("#response").append("<li>" + firstName + "</li>");
+            $.each(this, function (name, value) {
+                console.log(value);
+                $("#response").append("<li>" + value + "</li>");
+            });
+        });
+        $("#response").append("</ul>");
+    </script>
 }
-
-</table>
